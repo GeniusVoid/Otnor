@@ -1,0 +1,6 @@
+{
+  "name": "Otnor",
+  "description": "Native Android shell for Brainer featuring WebView host, Andropi local HTTP API server (60+ native capabilities), AccessibilityService text capture, fingerprint gestures, and screen freeze OCR overlay.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

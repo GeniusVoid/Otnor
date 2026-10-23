@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer neural hexagon / terminal ring -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M54,24 L79.98,39 L79.98,69 L54,84 L28.02,69 L28.02,39 Z M54,32 L35,43 L35,65 L54,76 L73,65 L73,43 Z" />
+    <!-- Inner core node & circuit bridges -->
+    <path
+        android:fillColor="#7C4DFF"
+        android:pathData="M54,42 L64.39,48 L64.39,60 L54,66 L43.61,60 L43.61,48 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,49 A5,5 0 1,1 53.99,49 Z" />
+</vector>

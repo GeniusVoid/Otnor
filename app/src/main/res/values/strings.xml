@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Otnor</string>
+    <string name="accessibility_service_description">Brainer Otnor Accessibility Service: Enables on-demand screen text capture, node tree inspection, automated actions, fingerprint swipe gestures, and screen freeze word selection for your personal Brainer environment.</string>
+    <string name="notification_channel_name">Brainer Foreground Service</string>
+    <string name="notification_channel_desc">Keeps the Andropi local HTTP API server and Brainer bridge active</string>
+    <string name="status_connected">Termux Backend Online (:8080)</string>
+    <string name="status_offline">Termux Offline • Cached / Console Mode</string>
+    <string name="andropi_running">Andropi API :8081 Active</string>
+</resources>
