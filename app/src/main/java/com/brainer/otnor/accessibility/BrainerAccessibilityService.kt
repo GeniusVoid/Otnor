@@ -1,6 +1,7 @@
 package com.brainer.otnor.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.accessibilityservice.GestureDescription
 import android.graphics.Path
 import android.os.Build
@@ -25,9 +26,22 @@ class BrainerAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        // Explicitly strip any touch-hijacking flags so normal single-finger touch is never altered
+        try {
+            serviceInfo = serviceInfo?.apply {
+                flags = flags and AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE.inv()
+                flags = flags and AccessibilityServiceInfo.FLAG_REQUEST_ACCESSIBILITY_BUTTON.inv()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    flags = flags and AccessibilityServiceInfo.FLAG_SEND_MOTION_EVENTS.inv()
+                }
+                feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+            }
+        } catch (e: Exception) {
+            Log.w(Constants.TAG_OTNOR, "Failed sanitizing AccessibilityServiceInfo flags: ${e.message}")
+        }
         ServiceHolder.accessibilityService = this
         fingerprintHandler = FingerprintGestureHandler(this).also { it.setup() }
-        Log.i(Constants.TAG_OTNOR, "BrainerAccessibilityService connected")
+        Log.i(Constants.TAG_OTNOR, "BrainerAccessibilityService connected (Safe Touch Mode)")
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
