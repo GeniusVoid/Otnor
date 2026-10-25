@@ -24,7 +24,7 @@ class TermuxCommandReceiver : BroadcastReceiver() {
                 "reload" -> WebViewManager.reloadFromExternal()
                 "load_url" -> if (arg.isNotBlank()) WebViewManager.loadUrlFromExternal(arg)
                 "toast" -> Toast.makeText(context, arg.ifBlank { "Otnor Command Received" }, Toast.LENGTH_SHORT).show()
-                "popup" -> ScreenFreezeOverlay.showQuickActionsPopup(context)
+                "popup" -> ScreenFreezeOverlay.showWebViewPopup(context, "http://127.0.0.1:8080/popup.html", "center", 350, 520)
                 "freeze" -> ServiceHolder.accessibilityService?.let { svc ->
                     Thread { ScreenFreezeOverlay.freezeCurrentScreen(svc) }.start()
                 }
