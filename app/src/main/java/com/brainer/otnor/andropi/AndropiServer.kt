@@ -32,9 +32,19 @@ class AndropiServer(context: Context) : NanoHTTPD(Constants.ANDROPI_HOST, Consta
 
         return try {
             val bodyString = if (method == Method.POST || method == Method.PUT) {
-                val files = HashMap<String, String>()
-                session.parseBody(files)
-                files["postData"] ?: ""
+                val contentLength = session.headers["content-length"]?.toIntOrNull() ?: 0
+                if (contentLength > 0) {
+                    val buffer = ByteArray(contentLength)
+                    var bytesRead = 0
+                    while (bytesRead < contentLength) {
+                        val read = session.inputStream.read(buffer, bytesRead, contentLength - bytesRead)
+                        if (read == -1) break
+                        bytesRead += read
+                    }
+                    String(buffer, 0, bytesRead, Charsets.UTF_8)
+                } else {
+                    ""
+                }
             } else {
                 ""
             }
