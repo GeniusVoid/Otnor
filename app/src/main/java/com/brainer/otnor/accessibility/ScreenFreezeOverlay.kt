@@ -265,7 +265,7 @@ object ScreenFreezeOverlay {
                     container.addView(btn)
                 }
 
-                val params = createOverlayLayoutParams(context, position, widthDp, heightDp)
+                val params = createOverlayLayoutParams(context, position, widthDp, heightDp, focusable = true)
                 wm.addView(container, params)
                 popupOverlayView = container
                 isPopupActive = true
@@ -324,7 +324,7 @@ object ScreenFreezeOverlay {
                     )
                 )
 
-                val params = createOverlayLayoutParams(context, position, widthDp, heightDp)
+                val params = createOverlayLayoutParams(context, position, widthDp, heightDp, focusable = true)
                 wm.addView(container, params)
                 popupOverlayView = container
                 isPopupActive = true
@@ -359,7 +359,8 @@ object ScreenFreezeOverlay {
         context: Context,
         position: String,
         widthDp: Int,
-        heightDp: Int
+        heightDp: Int,
+        focusable: Boolean = false
     ): WindowManager.LayoutParams {
         val gravity = when (position.lowercase()) {
             "bottom_right" -> Gravity.BOTTOM or Gravity.END
@@ -368,16 +369,25 @@ object ScreenFreezeOverlay {
             "top_left" -> Gravity.TOP or Gravity.START
             else -> Gravity.CENTER
         }
+        val flags = if (focusable) {
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+        } else {
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        }
         return WindowManager.LayoutParams(
             dp(context, widthDp),
             dp(context, heightDp),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            flags,
             PixelFormat.TRANSLUCENT
         ).apply {
             this.gravity = gravity
             x = dp(context, 16)
             y = dp(context, 48)
+            if (focusable) {
+                softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            }
         }
     }
 
