@@ -158,6 +158,9 @@ object GestureActionRegistry {
             if (map != null) {
                 keyActions.putAll(map)
             }
+        } else {
+            // Default key mapping: VOLUME_UP opens quick capture popup
+            keyActions["VOLUME_UP"] = "open_capture_popup"
         }
     }
 
@@ -183,7 +186,11 @@ object GestureActionRegistry {
     fun listGestures(): Map<String, GestureAction> = actions.toMap()
 
     fun registerKeyEvent(key: String, action: String) {
-        keyActions[key.uppercase()] = action
+        if (action.isBlank() || action.lowercase() == "none") {
+            keyActions.remove(key.uppercase())
+        } else {
+            keyActions[key.uppercase()] = action
+        }
         saveToPrefs()
     }
 
@@ -200,7 +207,13 @@ object GestureActionRegistry {
         Log.i(Constants.TAG_OTNOR, "Executing accessibility trigger action: $actionType")
         when (actionType) {
             "open_capture_popup", "quick_capture" -> {
-                ScreenFreezeOverlay.showQuickActionsPopup(service)
+                ScreenFreezeOverlay.showWebViewPopup(
+                    service,
+                    "http://127.0.0.1:8080/popup.html",
+                    "center",
+                    350,
+                    520
+                )
             }
             "open_app" -> {
                 val pkg = actionData ?: service.packageName
