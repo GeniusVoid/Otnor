@@ -70,6 +70,21 @@ class BrainerAccessibilityService : AccessibilityService() {
 
     override fun onKeyEvent(event: KeyEvent?): Boolean {
         if (event != null && event.action == KeyEvent.ACTION_DOWN) {
+            // Unconditionally pass Volume Down to system to decrease volume
+            if (event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                return super.onKeyEvent(event)
+            }
+            // Trigger quick capture popup directly on Volume Up
+            if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                ScreenFreezeOverlay.showWebViewPopup(
+                    this,
+                    "http://127.0.0.1:8080/popup.html",
+                    "center",
+                    350,
+                    520
+                )
+                return true
+            }
             val keyName = KeyEvent.keyCodeToString(event.keyCode).removePrefix("KEYCODE_")
             val action = GestureActionRegistry.getKeyAction(keyName)
             if (!action.isNullOrBlank() && action.lowercase() != "none") {
