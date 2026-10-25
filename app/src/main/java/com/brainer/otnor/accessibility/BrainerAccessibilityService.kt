@@ -72,7 +72,7 @@ class BrainerAccessibilityService : AccessibilityService() {
         if (event != null && event.action == KeyEvent.ACTION_DOWN) {
             val keyName = KeyEvent.keyCodeToString(event.keyCode).removePrefix("KEYCODE_")
             val action = GestureActionRegistry.getKeyAction(keyName)
-            if (action != null) {
+            if (!action.isNullOrBlank() && action.lowercase() != "none") {
                 GestureActionRegistry.executeNamedAction(action, null, this)
                 return true
             }
